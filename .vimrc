@@ -31,24 +31,15 @@ set number
 " Syntax highlighting
 syntax on
 
-" Auto-indent
-"set autoindent
-"set smartindent
-
 " Show cursor position
 set ruler
 
 " Show filename in window title
 set title
 
-" Window switching
-"nnoremap <C-R> <C-W><C-J>
-"nnoremap <C-K> <C-W><C-K>
-"nnoremap <C-L> <C-W><C-L>
-"nnoremap <C-H> <C-W><C-H>
-
-" Enable mouse support
-set mouse=a
+" Enable mouse support; disabled because it breaks clipboard copying in GNU
+" Screen.
+"set mouse=a
 
 " Set path so you can type gf to open a linked file
 set path=$PWD/**
@@ -64,19 +55,14 @@ endif
 " Use wordwrap
 set linebreak
 
-" Show commands as you type them
+" Show commands as you type them; disabled because it slows things down
 "set showcmd
 
 " Visual autocomplete
 set wildmenu
 
-" Highlight matching braces
-"set showmatch
-
-" No error bells
-"set noerrorbells
-
-" Switch escape and tab
+" Switch escape and tab; disabled because I remapped caps lock to the escape
+" key at the OS level
 "nnoremap <Tab> <Esc>
 "vnoremap <Tab> <Esc>gV
 "onoremap <Tab> <Esc>
@@ -84,11 +70,16 @@ set wildmenu
 "inoremap <Leader><Tab> <Tab>
 
 " Allow backspacing old text
-
 set backspace=indent,eol,start
 
-" The number of spaces to indent to
+" Use one space for indentation and never use tabs
 set shiftwidth=1
+set expandtab
+
+" Automatic indentation; this needs to be turned off when pasting code into
+" the terminal. Use `set shiftwidth=N` to change indentation amount.
+filetype plugin indent on
+set cinoptions=l1
 
 " Remove comment characters when joining commented lines
 if v:version >= 704
@@ -142,27 +133,27 @@ else
  endif
 endif
 
-" Automatic indentation; this needs to be turned off when pasting code into
-" the terminal. Use `set shiftwidth=N` to change indentation amount.
-set autoindent
-set smartindent
+function EnableSpellChecker()
+ " Use the spell checker. Spelling commands start with z (which is pretty
+ " much where all the miscellaneous functions go).
+ " 
+ " zg -> mark word as a Good spelling
+ " zw -> mark word as Wrong spelling
+ " z= -> SET as spelling suggestion from menu
+ "
+ " Navigating through misspelled words:
+ " [s = previous misspelled word
+ " ]s = next misspelled word
+ set spell
+ 
+ " Keep a separate ignore spelling file per file
+ let spelldir = "~/.vim/spell/"
+ if !isdirectory(expand(spelldir))
+   let spelldir = "."
+ endif
+ let fn = spelldir.substitute(@%, '/', '%', 'g').".utf-8.add"
+ execute "setlocal spellfile+=".fn
+endfunction
 
-" Use the spell checker. Spelling commands start with z (which is pretty
-" much where all the miscellaneous functions go).
-" 
-" zg -> mark word as a Good spelling
-" zw -> mark word as Wrong spelling
-" z= -> SET as spelling suggestion from menu
-"
-" Navigating through misspelled words:
-" [s = previous misspelled word
-" ]s = next misspelled word
-set spell
-
-" Keep a separate ignore spelling file per file
-let spelldir = "~/.vim/spell/"
-if !isdirectory(expand(spelldir))
-  let spelldir = "."
-endif
-let fn = spelldir.substitute(@%, '/', '%', 'g').".utf-8.add"
-execute "setlocal spellfile+=".fn
+" Don't use spell checker unless we're dealing with plain text.
+autocmd FileType text,plaintext call EnableSpellChecker()
