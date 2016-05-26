@@ -78,7 +78,7 @@ set expandtab
 
 " Automatic indentation; this needs to be turned off when pasting code into
 " the terminal. Use `set shiftwidth=N` to change indentation amount.
-filetype plugin indent on
+"filetype plugin indent on
 set cinoptions=l1
 
 " Remove comment characters when joining commented lines
@@ -111,13 +111,13 @@ function UpdateModifiable()
 endfunction
 autocmd BufReadPost * call UpdateModifiable()
 
-" Autocomplete words from the UNIX dictionary; useful in conjunction with 
+" Autocomplete words from the UNIX dictionary; useful in conjunction with
 " CTRL-X CTRL-K completion
 if filereadable("/usr/share/dict/words")
  set dictionary=/usr/share/dict/words
 endif
 
-" Disable blinking cursor in case you're running gvim or your terminal 
+" Disable blinking cursor in case you're running gvim or your terminal
 " emulator doesn't have the option.
 set guicursor+=a:blinkon0
 
@@ -128,7 +128,7 @@ else
  if has("unix")
   let s:uname=system("uname")
    if s:uname == "Darwin\n"
-    colorscheme darkblue
+    "colorscheme darkblue
    endif
  endif
 endif
@@ -136,7 +136,7 @@ endif
 function EnableSpellChecker()
  " Use the spell checker. Spelling commands start with z (which is pretty
  " much where all the miscellaneous functions go).
- " 
+ "
  " zg -> mark word as a Good spelling
  " zw -> mark word as Wrong spelling
  " z= -> SET as spelling suggestion from menu
@@ -145,7 +145,7 @@ function EnableSpellChecker()
  " [s = previous misspelled word
  " ]s = next misspelled word
  set spell
- 
+
  " Keep a separate ignore spelling file per file
  let spelldir = "~/.vim/spell/"
  if !isdirectory(expand(spelldir))
@@ -157,3 +157,10 @@ endfunction
 
 " Don't use spell checker unless we're dealing with plain text.
 autocmd FileType text,plaintext call EnableSpellChecker()
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
