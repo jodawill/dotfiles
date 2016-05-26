@@ -42,6 +42,10 @@ l() {
  $lsc "./$1";
 }
 
+gl() {
+ head -n "$1" $2|tail -n 1;
+}
+
 alias n=clcd;
 alias b="n ..";
 
@@ -96,3 +100,28 @@ PS1='\[\033[0;32m\]\u: \[\033[1;31m\]\W\[\033[1;35m\]$(__git_ps1)\[\033[1;34m\]\
 alias s='sudo $(history -p !!)';
 
 alias vi=vim;
+
+##
+# Your previous /Users/josh.williams/.bash_profile file was backed up as /Users/josh.williams/.bash_profile.macports-saved_2016-04-01_at_09:53:06
+##
+
+# MacPorts Installer addition on 2016-04-01_at_09:53:06: adding an appropriate PATH variable for use with MacPorts.
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+# Finished adapting your PATH environment variable for use with MacPorts.
+
+# Enable recursive wildcards if supported
+setopt() {
+ for i in $@; do
+  if `shopt -p|grep "$i"`; then
+   shopt -s "$i";
+  fi
+ done
+}
+setopt globstar dirspell cdspell
+
+echo;
+echo '"Any fool can criticize, condemn and complain - and most fools do. But
+it takes character and self-control to be understanding and forgiving."
+
+	- Benjamin Franklin';
+echo;
